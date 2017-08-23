@@ -1,5 +1,10 @@
 package com.didispace.platform.util;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.springframework.stereotype.Component;
+
 /**
  * Twitter_Snowflake<br>
  * SnowFlake的结构如下(每部分用-分开):<br>
@@ -14,7 +19,8 @@ package com.didispace.platform.util;
  * SnowFlake的优点是，整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞(由数据中心ID和机器ID作区分)，并且效率较高，经测试，
  * SnowFlake每秒能够产生26万ID左右。
  */
-public class SnowflakeIdWorker {
+@Component
+public class IdWorker {
 
 	// ==============================Fields===========================================
 	/** 开始时间截 (2015-01-01) */
@@ -68,7 +74,7 @@ public class SnowflakeIdWorker {
 	 * @param datacenterId
 	 *            数据中心ID (0~31)
 	 */
-	public SnowflakeIdWorker(long workerId, long datacenterId) {
+	public IdWorker(long workerId, long datacenterId) {
 		if (workerId > maxWorkerId || workerId < 0) {
 			throw new IllegalArgumentException(
 					String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
@@ -147,11 +153,25 @@ public class SnowflakeIdWorker {
 	// ==============================Test=============================================
 	/** 测试 */
 	public static void main(String[] args) {
-		SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
-		for (int i = 0; i < 1000; i++) {
-			long id = idWorker.nextId();
-			System.out.println(Long.toBinaryString(id));
-			System.out.println(id);
+		
+		ExecutorService es = Executors.newFixedThreadPool(5);
+		final IdWorker idWorker = new IdWorker(0, 0);
+		for(int i=0; i<15; i++){
+			es.execute(new Runnable(){
+				@Override
+				public void run() {
+					
+					System.out.println(Thread.currentThread().getName()+"  "+System.currentTimeMillis()+"==>"+idWorker.nextId());
+				}
+			});
 		}
+		
+		es.shutdown();
+		
+//		for (int i = 0; i < 1000; i++) {
+//			long id = idWorker.nextId();
+//			System.out.println(Long.toBinaryString(id));
+//			System.out.println(id);
+//		}
 	}
 }
