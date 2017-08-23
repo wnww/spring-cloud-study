@@ -1,11 +1,14 @@
 package com.didispace.web;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.didispace.platform.annotation.TxTransaction;
+import com.didispace.platform.transaction.ResultEntity;
 import com.didispace.platform.transaction.TxTransactionContext;
 import com.didispace.platform.util.Constants;
 import com.didispace.service.ComputeClient;
@@ -19,22 +22,27 @@ public class ConsumerController {
 	
 	@TxTransaction(value=Constants.Type.ACTIVITY, confirmMethod="addConfirm", cancelMethod="addCancel")
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public Integer add() {
+	public ResultEntity add() {
 		System.out.println("业务发起端被调用了");
 		TxTransactionContext context = new TxTransactionContext();
 		context.setObj(new Object[]{10,20});
-        return computeClient.add(context);
+		ResultEntity re = computeClient.add(context);
+        return re;
     }
 	
 	@RequestMapping(value = "/addConfirm", method = RequestMethod.POST)
-	public Integer addConfirm() {
+	public ResultEntity addConfirm() {
 		System.out.println("activity==addConfirm被调用了");
-		return 0;
+		ResultEntity re = new ResultEntity();
+		re.setFlag(Constants.ResultStatus.TRUE);
+		return re;
     }
 	
 	@RequestMapping(value = "/addCancel", method = RequestMethod.POST)
-	public Integer addCancel() {
+	public ResultEntity addCancel() {
 		System.out.println("activity==addCancel被调用了");
-		return 0;
+		ResultEntity re = new ResultEntity();
+		re.setFlag(Constants.ResultStatus.TRUE);
+		return re;
     }
 }
