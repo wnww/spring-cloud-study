@@ -17,11 +17,24 @@ public class ConsumerController {
 	@Autowired
 	private ComputeClient computeClient;
 	
-	@TxTransaction(Constants.Type.ACTIVITY)
+	@TxTransaction(value=Constants.Type.ACTIVITY, confirmMethod="addConfirm", cancelMethod="addCancel")
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public Integer add() {
 		System.out.println("业务发起端被调用了");
 		TxTransactionContext context = new TxTransactionContext();
-        return computeClient.add(context,10, 20);
+		context.setObj(new Object[]{10,20});
+        return computeClient.add(context);
+    }
+	
+	@RequestMapping(value = "/addConfirm", method = RequestMethod.POST)
+	public Integer addConfirm() {
+		System.out.println("activity==addConfirm被调用了");
+		return 0;
+    }
+	
+	@RequestMapping(value = "/addCancel", method = RequestMethod.POST)
+	public Integer addCancel() {
+		System.out.println("activity==addCancel被调用了");
+		return 0;
     }
 }

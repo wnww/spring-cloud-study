@@ -34,6 +34,15 @@ public class Activity implements java.io.Serializable{
 	private String execMethod;
 	
 	/**
+	 * confirm调用地址
+	 */
+	private String callConfirmUrl;
+	/**
+	 * cancel调用地址
+	 */
+	private String callCancelUrl;
+	
+	/**
 	 * 主业务执行方法参数类型
 	 */
 	private Class<?>[] parameterTypes;
@@ -100,6 +109,22 @@ public class Activity implements java.io.Serializable{
 		this.execMethod = execMethod;
 	}
 	
+	public String getCallConfirmUrl() {
+		return callConfirmUrl;
+	}
+
+	public void setCallConfirmUrl(String callConfirmUrl) {
+		this.callConfirmUrl = callConfirmUrl;
+	}
+
+	public String getCallCancelUrl() {
+		return callCancelUrl;
+	}
+
+	public void setCallCancelUrl(String callCancelUrl) {
+		this.callCancelUrl = callCancelUrl;
+	}
+
 	public Class<?>[] getParameterTypes() {
 		return parameterTypes;
 	}

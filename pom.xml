@@ -36,6 +36,7 @@
 		<module>compute-service</module>
 		<module>eureka-ribbon</module>
 		<module>eureka-feign</module>
-    <module>tcc-transaction</module>
+    	<module>tcc-transaction</module>
+    	<module>tcc-transaction-manager</module>
   </modules>
 </project>

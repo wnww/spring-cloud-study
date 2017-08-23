@@ -24,29 +24,29 @@ public class ComputeController {
 
 	@TxTransaction(value = Constants.Type.ACTION, confirmMethod = "addConfirm", cancelMethod = "addCancel")
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public Integer add(@RequestBody TxTransactionContext context, @RequestParam Integer a, @RequestParam Integer b) {
-		System.out.println("服务提供端被访问到");
+	public Integer add(@RequestBody TxTransactionContext tx) {
+		System.out.println("\r\n服务提供端被访问到");
 		ServiceInstance instance = client.getLocalServiceInstance();
-		Integer r = a + b;
+		Object[] obj = tx.getObj();
+		Integer r = Integer.parseInt(obj[0].toString()) + Integer.parseInt(obj[1].toString());
 		logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + r);
 		return r;
 	}
 	
-	@RequestMapping(value = "/addConfirm", method = RequestMethod.POST)
-	public Integer addConfirm(@RequestParam Integer a, @RequestParam Integer b) {
-		System.out.println("服务端确认操作被执行了");
-		ServiceInstance instance = client.getLocalServiceInstance();
-		Integer r = a + b;
-		logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + r);
+	@RequestMapping(value = "/addConfirm", method = {RequestMethod.POST,RequestMethod.GET})
+	public Integer addConfirm(@RequestBody TxTransactionContext tx) {
+		System.out.println("_+_+_+_+_+_+_+_+_+_+_");
+		Object[] obj = tx.getObj();
+		int r = Integer.parseInt(obj[1].toString())-Integer.parseInt(obj[0].toString());
+		System.out.println("\r\n服务端addConfirm被调用了，结果："+r);
 		return r;
 	}
 	
-	@RequestMapping(value = "/addCancel", method = RequestMethod.POST)
-	public Integer addCancel(@RequestParam Integer a, @RequestParam Integer b) {
-		System.out.println("服务取消操作被执行了");
-		ServiceInstance instance = client.getLocalServiceInstance();
-		Integer r = a + b;
-		logger.info("/add, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + r);
+	@RequestMapping(value = "/addCancel", method = {RequestMethod.POST,RequestMethod.GET})
+	public Integer addCancel(@RequestBody TxTransactionContext tx) {
+		Object[] obj = tx.getObj();
+		int r = (Integer.parseInt(obj[0].toString())-Integer.parseInt(obj[1].toString()))/2;
+		System.out.println("\r\n服务端addCancel被调用了，结果："+r);
 		return r;
 	}
 }
