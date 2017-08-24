@@ -95,7 +95,12 @@ public class TransactionIntercept {
 					Object callResult = null;
 					try {
 						callResult = pjp.proceed(args);
-						this.callConfirm(t, pjp, activityId);
+						ResultEntity re = (ResultEntity)callResult;
+						if(re!=null && re.getFlag().equals(Constants.ResultStatus.TRUE)){
+							this.callConfirm(t, pjp, activityId);
+						}else{
+							this.callCancel(t, pjp, activityId);
+						}
 					} catch (Exception e) {
 						this.callCancel(t, pjp, activityId);
 						e.printStackTrace();
