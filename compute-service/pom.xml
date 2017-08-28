@@ -26,11 +26,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- MYSQL依赖 -->  
+        <dependency>  
+            <groupId>mysql</groupId>  
+            <artifactId>mysql-connector-java</artifactId><!--mysql驱动包  -->  
+        </dependency>
+        <!-- mybatis依赖 -->  
+        <dependency>  
+            <groupId>org.mybatis.spring.boot</groupId>  
+            <artifactId>mybatis-spring-boot-starter</artifactId><!--boot整合mybatis的关键包annotation  -->  
+            <version>1.1.1</version>  
+        </dependency>
 		<dependency>
-		        <groupId>com.yhhl.spring.cloud</groupId>
-		        <artifactId>tcc-transaction</artifactId>
-		        <version>${project.version}</version>
-		    </dependency>
+	        <groupId>com.yhhl.spring.cloud</groupId>
+	        <artifactId>tcc-transaction</artifactId>
+	        <version>${project.version}</version>
+	    </dependency>
 	</dependencies>
 
 	<build>

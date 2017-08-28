@@ -38,5 +38,6 @@
 		<module>eureka-feign</module>
     	<module>tcc-transaction</module>
     	<module>tcc-transaction-manager</module>
+    <module>compute-service-api</module>
   </modules>
 </project>
